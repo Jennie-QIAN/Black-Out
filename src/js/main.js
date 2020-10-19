@@ -1,20 +1,31 @@
 import {
-    LevelManager,
+    allMaps,
+    Levels,
 } from './levels.js';
 
-import { 
+import {
     GRID,
     TILE_SIZE,
-    GameArea, 
+    GameArea,
 } from './canvas.js';
 
-document.getElementById('btn-render-game').onclick = function() {
+import { Game } from './game.js';
+
+const startGameButton = document.getElementById('btn-render-game');
+
+startGameButton.addEventListener('click', onClickStart);
+
+function onClickStart() {
     const canvas = document.createElement("Canvas");
     canvas.setAttribute("width", GRID.COL * TILE_SIZE);
     canvas.setAttribute("height", GRID.ROW * TILE_SIZE);
     document.body.insertBefore(canvas, document.querySelector('script'));
 
-    const levels = new LevelManager();
-    let gameArea = new GameArea(canvas, levels.getLevel(1));
+    const levels = new Levels(allMaps);
+    const game = new Game(levels);
+
+    game.chooseLevel(1);
+
+    let gameArea = new GameArea(canvas, game.getCurrentMap());
     gameArea.createTileMap();
-};
+}

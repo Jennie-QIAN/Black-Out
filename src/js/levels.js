@@ -1,6 +1,6 @@
 //0, = transparent tile, 1 = player origine location, 2, = wall, 3, = box, 4, = target
 
-const LEVEL_1 = [
+const MAP_1 = [
     [0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,2,3,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -14,18 +14,23 @@ const LEVEL_1 = [
     [0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0],
 ];
 
-export class LevelManager {
-    constructor() {
-        this.levels = [
-            LEVEL_1,
-        ];
+export const allMaps = [
+    MAP_1,
+];
+
+export class Levels {
+
+    constructor(maps) {
+        this.maps = maps;
     }
 
-    getLevel(levelNumber) {
-        const level = this.levels[levelNumber-1];
-        if (!level) {
+    getMap(levelNumber) {
+        const map = this.maps[levelNumber-1];
+        if (!map) {
             throw new Error(`Level ${levelNumber} does not exist.`);
         }
-        return level;
+        return map;
     }
 }
+
+
