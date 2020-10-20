@@ -1,5 +1,10 @@
 import { Levels } from '../src/js/levels.js';
 
+// window.jasmine.getEnv().randomizeTests(false);
+window.jasmine.getEnv().configure({
+    random: false
+  });
+
 describe('Levels Class', () => {
 
     it('get the map of the level', () => {
