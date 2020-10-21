@@ -4,14 +4,7 @@ export class Game {
         this.levels = levels;
         this.currentLevelNum = null;
         this.history = [];
-    }
-
-    getCurrentMap() {
-        return this.history[this.history.length - 1];
-    }
-
-    getCurrentLevelNum() {
-        return this.currentLevelNum;
+        this.boxToTarget = 0;
     }
 
     chooseLevel(levelNumber) {
@@ -27,6 +20,23 @@ export class Game {
         this.chooseLevel(this.currentLevelNum + 1);
     }
 
+    getCurrentMap() {
+        return this.history[this.history.length - 1];
+    }
+
+    getCurrentLevelNum() {
+        return this.currentLevelNum;
+    }
+
+    copyMap(map) {
+        return JSON.parse(JSON.stringify(map));
+    }
+
+    cancel(){
+        if (this.history.length === 1) return;
+        this.history.pop();
+    }
+
     getPlayerLocation() {
         const currentMap = this.getCurrentMap();
         const rows = currentMap.length;
@@ -35,128 +45,89 @@ export class Game {
         for (let c = 0; c < cols; c++) {
             for (let r = 0; r < rows; r++) {
                 if (currentMap[r][c] === 1) {
-                    return { r: r, c: c };
+                    return {
+                        r: r,
+                        c: c
+                    };
                 }
             }
         }
+
+        throw new Error('There is no player in the map.');
     }
 
-    moveUpPlayer() {
+    move(direction) {
+        const currentMap = this.copyMap(this.getCurrentMap());
         const playerLocation = this.getPlayerLocation();
-        const playerNextLocation = {
-            r: playerLocation.r -1,
-            c: playerLocation.c
-        };
+        const playerRow = playerLocation.r;
+        const playerCol = playerLocation.c;
+        let deltaR, deltaC;
 
-        const currentMap = this.getCurrentMap();
-        if (currentMap[playerNextLocation.r][playerNextLocation.c] === 2) {
+
+        switch (direction) {
+            case 'up':
+                deltaR = -1;
+                deltaC = 0;
+                break;
+            case 'down':
+                deltaR = 1;
+                deltaC = 0;
+                break;
+            case 'left':
+                deltaR = 0;
+                deltaC = -1;
+                break;
+            case 'right':
+                deltaR = 0;
+                deltaC = 1;
+                break;
+        }
+
+        if (currentMap[playerRow + deltaR][playerCol + deltaC] === 2 || currentMap[playerRow + deltaR][playerCol + deltaC] === undefined) {
             return;
         }
 
-        currentMap[playerNextLocation.r][playerNextLocation.c] = 1;
-        currentMap[playerLocation.r][playerLocation.c] = 0;
-        this.history.push(currentMap);
-    }
+        if (currentMap[playerRow + deltaR][playerCol + deltaC] === 3 || currentMap[playerRow + deltaR][playerCol + deltaC] === 5) {
+            if (currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === 0) {
+                currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] = 3;
+            } else if (currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === 4) {
+                currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] = 5;
+                if (currentMap[playerRow + deltaR][playerCol + deltaC] === 3) {
+                    this.boxToTarget++;
+                }
+            }
+            currentMap[playerRow + deltaR][playerCol + deltaC] = 1;
 
-    moveDownPlayer() {
-        const playerLocation = this.getPlayerLocation();
-        const playerNextLocation = {
-            r: playerLocation.r + 1,
-            c: playerLocation.c
-        };
+            if (this.history[0][playerRow][playerCol] === 1) {
+                currentMap[playerRow][playerCol] = 0;
+            } else {
+                currentMap[playerRow][playerCol] = this.history[0][playerRow][playerCol];
+            }
 
-        const currentMap = this.getCurrentMap();
-        if (currentMap[playerNextLocation.r][playerNextLocation.c] === 2) {
-            return;
+        } else if (currentMap[playerRow + deltaR][playerCol + deltaC] === 0 || currentMap[playerRow + deltaR][playerCol + deltaC] === 4) {
+            currentMap[playerRow + deltaR][playerCol + deltaC] = 1;
+            if (this.history[0][playerRow][playerCol] === 1) {
+                currentMap[playerRow][playerCol] = 0;
+            } else {
+                currentMap[playerRow][playerCol] = this.history[0][playerRow][playerCol];
+            }
         }
-
-        currentMap[playerNextLocation.r][playerNextLocation.c] = 1;
-        currentMap[playerLocation.r][playerLocation.c] = 0;
         this.history.push(currentMap);
     }
 
-    moveLeftPlayer() {
-        const playerLocation = this.getPlayerLocation();
-        const playerNextLocation = {
-            r: playerLocation.r,
-            c: playerLocation.c - 1
-        };
-
-        const currentMap = this.getCurrentMap();
-        if (currentMap[playerNextLocation.r][playerNextLocation.c] === 2) {
-            return;
-        }
-
-        currentMap[playerNextLocation.r][playerNextLocation.c] = 1;
-        currentMap[playerLocation.r][playerLocation.c] = 0;
-        this.history.push(currentMap);
+    moveUp() {
+        this.move('up');
     }
 
-    moveRightPlayer() {
-        const playerLocation = this.getPlayerLocation();
-        const playerNextLocation = {
-            r: playerLocation.r,
-            c: playerLocation.c + 1
-        };
-
-        const currentMap = this.getCurrentMap();
-        if (currentMap[playerNextLocation.r][playerNextLocation.c] === 2) {
-            return;
-        }
-
-        currentMap[playerNextLocation.r][playerNextLocation.c] = 1;
-        currentMap[playerLocation.r][playerLocation.c] = 0;
-        this.history.push(currentMap);
+    moveDown() {
+        this.move('down');
     }
 
-    checkIfBoxAbove() {
-        const r = this.getPlayerLocation().r - 1;
-        const c = this.getPlayerLocation().c;
-        const tileUpValue = this.getCurrentMap()[r][c];
-        return (tileUpValue === 3);
+    moveLeft() {
+        this.move('left');
     }
 
-    checkIfBoxBelow() {
-        const r = this.getPlayerLocation().r + 1;
-        const c = this.getPlayerLocation().c;
-        const tileUpValue = this.getCurrentMap()[r][c];
-        return (tileUpValue === 3);
-    }
-
-    checkIfBoxLeft() {
-        const r = this.getPlayerLocation().r;
-        const c = this.getPlayerLocation().c - 1;
-        const tileUpValue = this.getCurrentMap()[r][c];
-        return (tileUpValue === 3);
-    }
-
-    checkIfBoxRight() {
-        const r = this.getPlayerLocation().r;
-        const c = this.getPlayerLocation().c + 1;
-        const tileUpValue = this.getCurrentMap()[r][c];
-        return (tileUpValue === 3);
-    }
-
-    moveUpBox() {
-        const boxLocation = {
-            r: this.getPlayerLocation().r - 1,
-            c: this.getPlayerLocation().c
-        };
-
-        const boxNextLocation = {
-            r: this.getPlayerLocation().r - 2,
-            c: this.getPlayerLocation().c
-        };
-
-        const currentMap = this.getCurrentMap();
-
-        if (currentMap[boxNextLocation.r][boxNextLocation.c] === 2) {
-            return;
-        }
-
-        currentMap[boxNextLocation.r][boxNextLocation.c] = 3;
-        currentMap[boxLocation.r][boxLocation.c] = 0;
-        this.history.push(currentMap);
+    moveRight() {
+        this.move('right');
     }
 }
-

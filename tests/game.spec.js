@@ -93,6 +93,49 @@ describe('Game Class', () => {
         });
     });
 
+    describe('cancel', () => {
+        it('cancels the last movement in the game', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.moveUp();
+            game.cancel();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ]);
+        });
+
+        it('can not cancel if has not moved yet', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.cancel();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ]);
+        });
+    });
+
     describe('getPlayerLocation', () => {
         it('returns the location of player', () => {
             const MAP_1 = [
@@ -107,9 +150,23 @@ describe('Game Class', () => {
 
             expect(game.getPlayerLocation()).toEqual({r: 1, c: 2});
         });
+
+        it('throws an error if there is no player', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            expect(() => game.getPlayerLocation()).toThrow();
+        });
     });
 
-    describe('moveUpPlayer', () => {
+    describe('moveUp', () => {
         it('moves up the player', () => {
             const MAP_1 = [
                 [0,0,0],
@@ -121,7 +178,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveUpPlayer();
+            game.moveUp();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,1,0],
@@ -141,7 +198,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveUpPlayer();
+            game.moveUp();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,2,0],
@@ -151,7 +208,7 @@ describe('Game Class', () => {
         });
     });
 
-    describe('moveDownPlayer', () => {
+    describe('moveDown', () => {
         it('moves down the player', () => {
             const MAP_1 = [
                 [0,0,1],
@@ -163,7 +220,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveDownPlayer();
+            game.moveDown();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,0,0],
@@ -183,7 +240,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveDownPlayer();
+            game.moveDown();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,0,1],
@@ -193,7 +250,7 @@ describe('Game Class', () => {
         });
     });
 
-    describe('moveLeftPlayer', () => {
+    describe('moveLeft', () => {
         it('moves left the player', () => {
             const MAP_1 = [
                 [0,1,0],
@@ -205,7 +262,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveLeftPlayer();
+            game.moveLeft();
 
             expect(game.getCurrentMap()).toEqual([
                 [1,0,0],
@@ -225,7 +282,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveLeftPlayer();
+            game.moveLeft();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,2,1],
@@ -235,7 +292,7 @@ describe('Game Class', () => {
         });
     });
 
-    describe('moveRightPlayer', () => {
+    describe('moveRight', () => {
         it('moves right the player', () => {
             const MAP_1 = [
                 [0,1,0],
@@ -247,7 +304,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveRightPlayer();
+            game.moveRight();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,0,1],
@@ -267,118 +324,12 @@ describe('Game Class', () => {
             const game = new Game(levels);
             game.chooseLevel(1);
 
-            game.moveRightPlayer();
+            game.moveRight();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,1,2],
                 [0,0,0],
                 [0,0,0],
-            ]);
-        });
-    });
-
-    describe('checkIfBoxAbove', () => {
-        it ('checks if a box is above the player', () => {
-            const MAP_1 = [
-                [0,0,0],
-                [0,0,3],
-                [0,0,1],
-            ];
-            const maps = [MAP_1];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-            game.chooseLevel(1);
-
-            expect(game.checkIfBoxAbove()).toBeTruthy();
-        });
-    });
-
-    describe('checkIfBoxBelow', () => {
-        it ('checks if a box is below the player', () => {
-            const MAP_1 = [
-                [0,0,0],
-                [1,2,0],
-                [3,0,0],
-            ];
-            const maps = [MAP_1];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-            game.chooseLevel(1);
-
-            expect(game.checkIfBoxBelow()).toBeTruthy();
-        });
-    });
-
-    describe('checkIfBoxLeft', () => {
-        it ('checks if a box is to the left of the player', () => {
-            const MAP_1 = [
-                [0,0,0],
-                [2,2,0],
-                [3,1,0],
-            ];
-            const maps = [MAP_1];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-            game.chooseLevel(1);
-
-            expect(game.checkIfBoxLeft()).toBeTruthy();
-        });
-    });
-
-    describe('checkIfBoxRight', () => {
-        it ('checks if a box is to the left of the player', () => {
-            const MAP_1 = [
-                [0,0,0],
-                [2,2,0],
-                [3,1,3],
-            ];
-            const maps = [MAP_1];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-            game.chooseLevel(1);
-
-            expect(game.checkIfBoxRight()).toBeTruthy();
-        });
-    });
-
-    describe('moveUpBox', () => {
-        it('moves up the box', () => {
-            const MAP_1 = [
-                [0,0,0],
-                [0,3,0],
-                [0,1,0],
-            ];
-            const maps = [MAP_1];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-            game.chooseLevel(1);
-
-            game.moveUpBox();
-
-            expect(game.getCurrentMap()).toEqual([
-                [0,3,0],
-                [0,0,0],
-                [0,1,0],
-            ]);
-        });
-
-        it('does not let the box move up if there is a wall on top', () => {
-            const MAP_1 = [
-                [2,0,0],
-                [3,0,0],
-                [1,0,0],
-            ];
-            const maps = [MAP_1];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-            game.chooseLevel(1);
-
-            game.moveUpBox();
-
-            expect(game.getCurrentMap()).toEqual([
-                [2,0,0],
-                [3,0,0],
-                [1,0,0],
             ]);
         });
     });

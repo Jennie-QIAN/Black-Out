@@ -1,6 +1,6 @@
 //0, = transparent tile, 1 = player origine location, 2, = wall, 3, = box, 4, = target
 
-const MAP_1 = [
+const MAP_1 = () => [
     [0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,2,3,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -14,8 +14,8 @@ const MAP_1 = [
     [0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0],
 ];
 
-export const allMaps = [
-    MAP_1,
+export const allMaps = () => [
+    MAP_1(),
 ];
 
 export class Levels {

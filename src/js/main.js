@@ -21,7 +21,7 @@ function onClickStart() {
     canvas.setAttribute("height", GRID.ROW * TILE_SIZE);
     document.body.insertBefore(canvas, document.querySelector('script'));
 
-    const levels = new Levels(allMaps);
+    const levels = new Levels(allMaps());
     const game = new Game(levels);
 
     game.chooseLevel(1);
