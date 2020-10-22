@@ -93,8 +93,8 @@ describe('Game Class', () => {
         });
     });
 
-    describe('cancel', () => {
-        it('cancels the last movement in the game', () => {
+    describe('unDo', () => {
+        it('undo the last movement in the game', () => {
             const MAP_1 = [
                 [0,0,0],
                 [0,0,0],
@@ -106,7 +106,7 @@ describe('Game Class', () => {
 
             game.chooseLevel(1);
             game.moveUp();
-            game.cancel();
+            game.unDo();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,0,0],
@@ -126,7 +126,7 @@ describe('Game Class', () => {
             const game = new Game(levels);
 
             game.chooseLevel(1);
-            game.cancel();
+            game.unDo();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,0,0],
@@ -206,6 +206,90 @@ describe('Game Class', () => {
                 [0,0,0],
             ]);
         });
+
+        it('can not move out of the map', () => {
+            const MAP_1 = [
+                [0,0,1],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveUp();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,1],
+                [0,0,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('can not push a box out of the map', () => {
+            const MAP_1 = [
+                [0,0,3],
+                [0,0,1],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveUp();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,3],
+                [0,0,1],
+                [0,0,0],
+            ]);
+        });
+
+        it('turns to boxOnTarget when the box is turned to target', () => {
+            const MAP_1 = [
+                [0,0,0,0],
+                [0,0,0,4],
+                [0,0,0,3],
+                [0,0,0,1],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveUp();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0,0],
+                [0,0,0,5],
+                [0,0,0,1],
+                [0,0,0,0],
+            ]);
+        });
+
+        it('removes boxToTarget back to box when not on target', () => {
+            const MAP_1 = [
+                [0,0,0,0],
+                [0,0,0,5],
+                [0,0,0,1],
+                [0,0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveUp();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0,3],
+                [0,0,0,1],
+                [0,0,0,0],
+                [0,0,0,0],
+            ]);
+        });
     });
 
     describe('moveDown', () => {
@@ -246,6 +330,46 @@ describe('Game Class', () => {
                 [0,0,1],
                 [0,0,2],
                 [0,0,0],
+            ]);
+        });
+
+        it('can not move out of the map', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveDown();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ]);
+        });
+
+        it('can not push a box out of the map', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,1],
+                [0,0,3],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveDown();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,1],
+                [0,0,3],
             ]);
         });
     });
@@ -290,6 +414,70 @@ describe('Game Class', () => {
                 [0,0,0],
             ]);
         });
+
+        it('can not move out of the map', () => {
+            const MAP_1 = [
+                [1,0,0],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveLeft();
+
+            expect(game.getCurrentMap()).toEqual([
+                [1,0,0],
+                [0,0,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('can not push a box out of the map', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [3,1,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveLeft();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [3,1,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('gets back the target when player liberates the tile', () => {
+            const MAP_1 = [
+                [0,0,0,0],
+                [0,0,0,4],
+                [0,0,0,3],
+                [0,0,0,1],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveUp();
+            game.moveUp();
+            game.moveLeft();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0,3],
+                [0,0,1,4],
+                [0,0,0,0],
+                [0,0,0,0],
+            ]);
+        });
     });
 
     describe('moveRight', () => {
@@ -328,6 +516,66 @@ describe('Game Class', () => {
 
             expect(game.getCurrentMap()).toEqual([
                 [0,1,2],
+                [0,0,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('pushes a box into one target', () => {
+            const MAP_1 = [
+                [1,3,4],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveRight();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,1,5],
+                [0,0,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('can not move out of the map', () => {
+            const MAP_1 = [
+                [0,0,1],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveRight();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,1],
+                [0,0,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('can not push a box out of the map', () => {
+            const MAP_1 = [
+                [0,1,3],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveRight();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,1,3],
                 [0,0,0],
                 [0,0,0],
             ]);

@@ -4,7 +4,6 @@ export class Game {
         this.levels = levels;
         this.currentLevelNum = null;
         this.history = [];
-        this.boxToTarget = 0;
     }
 
     chooseLevel(levelNumber) {
@@ -13,10 +12,12 @@ export class Game {
     }
 
     choosePreviousLevel() {
+        this.history = [];
         this.chooseLevel(this.currentLevelNum - 1);
     }
 
     chooseNextLevel() {
+        this.history = [];
         this.chooseLevel(this.currentLevelNum + 1);
     }
 
@@ -32,7 +33,7 @@ export class Game {
         return JSON.parse(JSON.stringify(map));
     }
 
-    cancel(){
+    unDo(){
         if (this.history.length === 1) return;
         this.history.pop();
     }
@@ -56,14 +57,8 @@ export class Game {
         throw new Error('There is no player in the map.');
     }
 
-    move(direction) {
-        const currentMap = this.copyMap(this.getCurrentMap());
-        const playerLocation = this.getPlayerLocation();
-        const playerRow = playerLocation.r;
-        const playerCol = playerLocation.c;
+    getReference(direction) {
         let deltaR, deltaC;
-
-
         switch (direction) {
             case 'up':
                 deltaR = -1;
@@ -82,36 +77,54 @@ export class Game {
                 deltaC = 1;
                 break;
         }
+        return {
+            r: deltaR,
+            c: deltaC
+        };
+    }
 
-        if (currentMap[playerRow + deltaR][playerCol + deltaC] === 2 || currentMap[playerRow + deltaR][playerCol + deltaC] === undefined) {
+    move(direction) {
+        const currentMap = this.copyMap(this.getCurrentMap());
+        const originMap = this.history[0];
+
+        const playerLocation = this.getPlayerLocation();
+        const playerRow = playerLocation.r;
+        const playerCol = playerLocation.c;
+        const playerLocOriginValue = originMap[playerRow][playerCol];
+
+        const delta = this.getReference(direction);
+        const deltaR = delta.r;
+        const deltaC = delta.c;
+
+        if (currentMap[playerRow + deltaR] == undefined) {
             return;
         }
 
-        if (currentMap[playerRow + deltaR][playerCol + deltaC] === 3 || currentMap[playerRow + deltaR][playerCol + deltaC] === 5) {
+        if (currentMap[playerRow + deltaR][playerCol + deltaC] === 2) {
+            return;
+        }
+
+        if ([3,5].includes(currentMap[playerRow + deltaR][playerCol + deltaC])) {
+            if (currentMap[playerRow + 2 * deltaR] === undefined || currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === undefined) {
+                return;
+            }
+            if ([2,3,5].includes(currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC])) {
+                return;
+            }
             if (currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === 0) {
                 currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] = 3;
+                currentMap[playerRow + deltaR][playerCol + deltaC] = playerLocOriginValue === 4 ? 4 : 0;
             } else if (currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === 4) {
                 currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] = 5;
-                if (currentMap[playerRow + deltaR][playerCol + deltaC] === 3) {
-                    this.boxToTarget++;
-                }
-            }
-            currentMap[playerRow + deltaR][playerCol + deltaC] = 1;
-
-            if (this.history[0][playerRow][playerCol] === 1) {
-                currentMap[playerRow][playerCol] = 0;
-            } else {
-                currentMap[playerRow][playerCol] = this.history[0][playerRow][playerCol];
-            }
-
-        } else if (currentMap[playerRow + deltaR][playerCol + deltaC] === 0 || currentMap[playerRow + deltaR][playerCol + deltaC] === 4) {
-            currentMap[playerRow + deltaR][playerCol + deltaC] = 1;
-            if (this.history[0][playerRow][playerCol] === 1) {
-                currentMap[playerRow][playerCol] = 0;
-            } else {
-                currentMap[playerRow][playerCol] = this.history[0][playerRow][playerCol];
+                currentMap[playerRow + deltaR][playerCol + deltaC] = playerLocOriginValue === 4 ? 4 : 0;
             }
         }
+
+        if ([0,4].includes(currentMap[playerRow + deltaR][playerCol + deltaC])) {
+            currentMap[playerRow + deltaR][playerCol + deltaC] = 1;
+            currentMap[playerRow][playerCol] = playerLocOriginValue === 4 ? 4 : 0;
+        }
+
         this.history.push(currentMap);
     }
 
