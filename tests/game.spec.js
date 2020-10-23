@@ -46,50 +46,57 @@ describe('Game Class', () => {
         });
     });
 
-    describe('choosePreviousLevel', () => {
-        it('gets the map of the previous level', () => {
-            const MAP_1 = [
-                [0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0]
-            ];
-            const MAP_2 = [
-                [0,1,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,2,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0]
-            ];
-            const MAP_3 = [
-                [0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,1,0,0,0,0,0],
-                [0,0,0,0,2,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0]
-            ];
-            const maps = [MAP_1, MAP_2, MAP_3];
-            const levels = new Levels(maps);
-            const game = new Game(levels);
-
-            game.chooseLevel(3);
-            game.choosePreviousLevel();
-            game.choosePreviousLevel();
-
-            expect(game.getCurrentMap()).toEqual(MAP_1);
-        });
-    });
-
     describe('chooseNextLevel', () => {
         it('gets the map of next level', () => {
             const MAP_1 = [
                 [0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0]
             ];
-            const MAP_2 = [
-                [0,1,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                [0,0,0,0,2,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0]
-            ];
-            const maps = [MAP_1, MAP_2];
+            const maps = [MAP_1];
             const levels = new Levels(maps);
             const game = new Game(levels);
 
             game.chooseLevel(1);
-            game.chooseNextLevel();
 
-            expect(game.getCurrentMap()).toEqual(MAP_2);
+            expect(game.getCurrentMap()).toEqual(MAP_1);
+        });
+
+        it('updates the current level number', () => {
+            const MAP_1 = [
+                [0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+
+            expect(game.getCurrentLevelNum()).toEqual(1);
+        });
+    });
+
+    describe('choosePreviousLevel', () => {
+        it('gets the map of the previous level', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ];
+            const MAP_2 = [
+                [3,0,0],
+                [0,4,2],
+                [0,1,0],
+            ];
+
+            const maps = [MAP_1, MAP_2];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(2);
+            game.choosePreviousLevel();
+
+            expect(game.getCurrentMap()).toEqual(MAP_1);
         });
     });
 
@@ -127,6 +134,51 @@ describe('Game Class', () => {
 
             game.chooseLevel(1);
             game.unDo();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ]);
+        });
+    });
+
+    describe('reset', () => {
+        it('resets the game of currentlevel', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.moveUp();
+            game.moveRight();
+            game.moveLeft();
+            game.reset();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ]);
+        });
+
+        it('does nothing if has not moved yet', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.reset();
 
             expect(game.getCurrentMap()).toEqual([
                 [0,0,0],
@@ -207,6 +259,26 @@ describe('Game Class', () => {
             ]);
         });
 
+        it('does not let the player move up if there is a box on top of the box above player', () => {
+            const MAP_1 = [
+                [0,5,0],
+                [0,3,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveUp();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,5,0],
+                [0,3,0],
+                [0,1,0],
+            ]);
+        });
+
         it('can not move out of the map', () => {
             const MAP_1 = [
                 [0,0,1],
@@ -247,7 +319,7 @@ describe('Game Class', () => {
             ]);
         });
 
-        it('turns to boxOnTarget when the box is turned to target', () => {
+        it('turns to boxOnTarget when the box is pushed on target', () => {
             const MAP_1 = [
                 [0,0,0,0],
                 [0,0,0,4],
@@ -333,6 +405,26 @@ describe('Game Class', () => {
             ]);
         });
 
+        it('does not let the player move down if there is a box below the box below player', () => {
+            const MAP_1 = [
+                [0,1,0],
+                [0,3,0],
+                [0,3,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveDown();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,1,0],
+                [0,3,0],
+                [0,3,0],
+            ]);
+        });
+
         it('can not move out of the map', () => {
             const MAP_1 = [
                 [0,0,0],
@@ -410,6 +502,26 @@ describe('Game Class', () => {
 
             expect(game.getCurrentMap()).toEqual([
                 [0,2,1],
+                [0,0,0],
+                [0,0,0],
+            ]);
+        });
+
+        it('does not let the player move left if there is a box on left to the box left to player', () => {
+            const MAP_1 = [
+                [3,3,1],
+                [0,0,0],
+                [0,0,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveLeft();
+
+            expect(game.getCurrentMap()).toEqual([
+                [3,3,1],
                 [0,0,0],
                 [0,0,0],
             ]);
@@ -521,6 +633,26 @@ describe('Game Class', () => {
             ]);
         });
 
+        it('does not let the player move right if there is a box on right to the box right to player', () => {
+            const MAP_1 = [
+                [0,0,0],
+                [0,0,0],
+                [1,3,5],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+            game.chooseLevel(1);
+
+            game.moveLeft();
+
+            expect(game.getCurrentMap()).toEqual([
+                [0,0,0],
+                [0,0,0],
+                [1,3,5],
+            ]);
+        });
+
         it('pushes a box into one target', () => {
             const MAP_1 = [
                 [1,3,4],
@@ -579,6 +711,40 @@ describe('Game Class', () => {
                 [0,0,0],
                 [0,0,0],
             ]);
+        });
+    });
+
+    describe('checkIfWin', () => {
+        it('returns true if all the boxes are on the targets', () => {
+            const MAP_1 = [
+                [0,4,0],
+                [0,3,0],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.moveUp();
+
+            expect(game.checkIfWin()).toBeTruthy();
+        });
+
+        it('returns false if at least one target has no box on it', () => {
+            const MAP_1 = [
+                [0,4,0],
+                [0,3,0],
+                [0,1,4],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.moveUp();
+
+            expect(game.checkIfWin()).toBeFalsy();
         });
     });
 });

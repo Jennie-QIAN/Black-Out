@@ -5,41 +5,28 @@ export const GRID = {
 
 export const TILE_SIZE = 32;
 
-export class GameArea {
-    constructor(canvas, levelMap) {
-        this.levelMap = levelMap;
+export class GameBoard {
+    constructor(canvas, tileMapImg) {
         this.ctx = canvas.getContext('2d');
-        this.map = {
-            cols: levelMap[0].length,
-            rows: levelMap.length
-        };
+        this.tileMapImg = tileMapImg;
     }
 
-    createTileMap() {
-        //this.ctx.clearRect(0, 0, GRID.COL * TILE_SIZE, GRID.ROW * TILE_SIZE);
-        //this.ctx.save();
-        const mapRow = this.map.rows;
-        const mapCol = this.map.cols;
+    renderMap(level) {
+        this.ctx.clearRect(0, 0, GRID.COL * TILE_SIZE, GRID.ROW * TILE_SIZE);
+        this.ctx.save();
+        const mapRow = level.length;
+        const mapCol = level[0].length;
         const deltaX = (GRID.COL - mapCol) * TILE_SIZE / 2;
         const deltaY = (GRID.ROW - mapRow) * TILE_SIZE / 2;
 
         this.ctx.translate(deltaX, deltaY);
 
-        const tileMapImg = new Image();
-
-        tileMapImg.onload = () => {
-            this.drawTileMap(tileMapImg);
-        };
-        tileMapImg.src = "src/img/tilesheet.png";
-    }
-
-    drawTileMap(tileMapImg) {
-        for (let c = 0; c < this.map.cols; c++) {
-            for (let r = 0; r < this.map.rows; r++) {
-                let tile = this.levelMap[r][c];
+        for (let c = 0; c < level[0].length; c++) {
+            for (let r = 0; r < level.length; r++) {
+                let tile = level[r][c];
                 if (tile !== 0) {
                     this.ctx.drawImage(
-                        tileMapImg,
+                        this.tileMapImg,
                         (tile - 1) * TILE_SIZE,
                         0,
                         TILE_SIZE,
@@ -52,6 +39,7 @@ export class GameArea {
                 }
             }
         }
-        //this.ctx.restore();
+
+        this.ctx.restore();
     }
 }

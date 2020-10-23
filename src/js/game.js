@@ -7,17 +7,16 @@ export class Game {
     }
 
     chooseLevel(levelNumber) {
+        this.history = [];
         this.currentLevelNum = levelNumber;
         this.history.push(this.levels.getMap(this.currentLevelNum));
     }
 
     choosePreviousLevel() {
-        this.history = [];
         this.chooseLevel(this.currentLevelNum - 1);
     }
 
     chooseNextLevel() {
-        this.history = [];
         this.chooseLevel(this.currentLevelNum + 1);
     }
 
@@ -36,6 +35,13 @@ export class Game {
     unDo(){
         if (this.history.length === 1) return;
         this.history.pop();
+    }
+
+    reset() {
+        const length = this.history.length;
+        if (length > 1) {
+            this.history.splice(1, this.history.length - 1);
+        }
     }
 
     getPlayerLocation() {
@@ -142,5 +148,18 @@ export class Game {
 
     moveRight() {
         this.move('right');
+    }
+
+    checkIfWin() {
+        const originMap = this.history[0];
+        const currentMap = this.history[this.history.length - 1];
+
+        const targets = originMap.map(row => row.filter(tile => tile === 4));
+        const numOfTargets = targets.reduce((count, row) => count + row.length, 0);
+
+        const boxesOnTarget = currentMap.map(row => row.filter(tile => tile === 5));
+        const numOfBoxesOnTarget = boxesOnTarget.reduce((count, row) => count + row.length, 0);
+
+        return numOfTargets === numOfBoxesOnTarget;
     }
 }
