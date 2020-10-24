@@ -14,7 +14,7 @@ import {
 
 import { Game } from './game.js';
 
-const levelMenu = document.getElementById("level-menu");
+const levelMenu = document.getElementById("instr-and-level");
 levelMenu.style.display = "none";
 const startGameButton = document.getElementById('btn-show-levels');
 const selectLevelMenu = document.getElementById("level-select");
@@ -48,6 +48,9 @@ function onClickStart() {
 selectLevelMenu.addEventListener('change', onSelectLevel);
 
 function onSelectLevel() {
+    document.body.style.backgroundColor = "#0a0a0a";
+    document.body.style.color = "Whitesmoke";
+
     const index = selectLevelMenu.selectedIndex;
     levelNumber = index;
 
@@ -90,5 +93,28 @@ window.addEventListener('keydown', event => {
             break;
     }
     board.renderMap(game.getCurrentMap());
+    if (game.checkIfWin()) {
+        setTimeout(function() {
+            onWin();
+        }, 200) ;
+    }
 });
+
+function onWin() {
+    document.body.style.backgroundColor = "Whitesmoke";
+    document.body.style.color = "black";
+    
+    const onWinButtons = document.createElement('div');
+    onWinButtons.setAttribute("id", "btn-onwin");
+    const previousBtn = document.createElement('button');
+    previousBtn.textContent = "Previous Level";
+    previousBtn.setAttribute("id", "previous-level");
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = "Next Level";
+    nextBtn.setAttribute("id", "next-level");
+    onWinButtons.appendChild(previousBtn);
+    onWinButtons.appendChild(nextBtn);
+
+    document.body.insertBefore(onWinButtons, document.querySelector('script'));
+}
 

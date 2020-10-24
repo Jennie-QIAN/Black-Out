@@ -6,38 +6,52 @@
     <title>Black-Out</title>
     <link rel="stylesheet" href="src/css/style.css">
     <link rel="icon" type="image/x-icon" href="/src/img/black eyed pea.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>BLACK OUT</h1>
     <section id="manifesto">
         <div>
             <p>You are black-eyed pea</p>
-            <img src="" alt="">
+            <div id="pea"></div>
         </div>
         <div>
-            <p>You travel between walls</p>
-            <img src="" alt="">
+            <p>travel between the walls</p>
+            <div id="wall"></div>
         </div>
         <div>
-            <p>Pushing dimmed lights</p>
-            <img src="" alt="">
+            <p>connect dimmed lights</p>
+            <div id="box"></div>
         </div>
         <div>
-            <p>To get recharged</p>
-            <img src="" alt="">
+            <p>to backup powerbanks</p>
+            <div id="target"></div>
         </div>
         <div>
-            <p>And lighten up all</p>
-            <img src="" alt="">
+            <p>and light them up again</p>
+            <div id="light"></div>
         </div>
     </section>
     <button id="btn-show-levels">START</button>
-    <section id="level-menu">
-        <div>Instructions</div>
-        <div>
-            <label for="level-select">Go to level</label>
+    <section id="instr-and-level">
+        <div id="instructions">
+            <div id="arrowkeys">
+                <img src="src/img/arrowkeys.png" alt="arrowkeys">
+                <p>move</p>
+            </div>
+            <div id="z">
+                <img src="src/img/z.png" alt="key-z">
+                <p>undo last move</p>
+            </div>
+            <div id="spacebar">
+                <img src="src/img/spacebar.png" alt="spacebar">
+                <p>reset current level</p>
+            </div>
+        </div>
+        <div id="level-menu">
+            <label for="level-select">Level : </label>
             <select name="levels" id="level-select">
-                <option value="">--N--</option>
+                <option value="">--choose here--</option>
             </select>
         </div>
     </section>

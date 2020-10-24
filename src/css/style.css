@@ -2,38 +2,126 @@
 body {
     background-color: #0a0a0a;
     color: whitesmoke;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-h1 {
-    text-align: center;
-}
-
-#manifesto {
+    font-family: sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3rem;
     margin-top: 50px;
+    margin-bottom: 0;
+}
+
+#manifesto {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+
+#manifesto div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
 }
 
 #manifesto p {
+    font-size: 1.2rem;
     margin: 0;
 }
 
-button {
-    margin: 0 auto;
-    display: block;
+#pea,
+#wall,
+#box,
+#target,
+#light {
+    width: 32px;
+    height: 32px;
+    background: url(../img/tilesheet.png);
+    margin-left: 5px;
+}
+
+#wall {
+    background: url(../img/tilesheet.png) -32px 0;
+}
+
+#box {
+    background: url(../img/tilesheet.png) -64px 0;
+}
+
+#target {
+    background: url(../img/tilesheet.png) -96px 0;
+}
+
+#light {
+    background: url(../img/tilesheet.png) -128px 0;
+}
+
+#btn-show-levels {
+    background-color: transparent;
+    color: whitesmoke;
+    border: 1px solid #e7e7e7;
+    font-size: 1rem;
+    padding: 15px 80px;
+    border-radius: 6px;
+}
+
+#btn-show-levels:hover {
+    background-color: whitesmoke;
+    border: whitesmoke;
+    color: #0a0a0a;
+}
+
+#instructions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: baseline;
+}
+
+#instructions div {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#arrowkeys img {
+    height: 64px;
+}
+
+#z img {
+    height: 32px;
+}
+
+#spacebar img {
+    height: 32px;
+}
+
+#instr-and-level {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 30px;
 }
 
 #level-menu {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    margin: 30px;
+    background-color: #ffcc00;
+    border-radius: 4px;
+    padding: 8px;
+    color: #0a0a0a;
 }
 
-canvas {
-    margin-right: auto;
-    margin-left: auto;
-    display: block;
+#level-menu label {
+    font-size: 1.2rem;
+    margin-right: 10px;
 }
-
