@@ -1,5 +1,8 @@
 import {
     allMaps,
+} from './maps.js';
+
+import {
     Levels,
 } from './levels.js';
 
@@ -19,7 +22,6 @@ const selectLevelMenu = document.getElementById("level-select");
 const canvas = document.createElement("Canvas");
 canvas.setAttribute("width", GRID.COL * TILE_SIZE);
 canvas.setAttribute("height", GRID.ROW * TILE_SIZE);
-
 
 const levels = new Levels(allMaps());
 const game = new Game(levels);

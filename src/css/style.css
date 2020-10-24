@@ -32,6 +32,8 @@ button {
 }
 
 canvas {
-    border: 1px solid yellow;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
 }
 
