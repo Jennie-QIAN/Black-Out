@@ -15,7 +15,6 @@ import {
 import { Game } from './game.js';
 
 const levelMenu = document.getElementById("instr-and-level");
-levelMenu.style.display = "none";
 const startGameButton = document.getElementById('btn-show-levels');
 const selectLevelMenu = document.getElementById("level-select");
 
@@ -33,7 +32,7 @@ startGameButton.addEventListener('click', onClickStart);
 function onClickStart() {
     document.getElementById('manifesto').style.display = "none";
     startGameButton.style.display = "none";
-    levelMenu.style.display = "flex";
+    levelMenu.classList.remove("hidden");
 
     const numberOfLevels = allMaps().length;
     let n = 1;
