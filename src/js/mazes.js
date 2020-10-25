@@ -1,4 +1,4 @@
-//Credits : https://github.com/begoon/sokoban-maps
+//Source of the following 60 maps: https://github.com/begoon/sokoban-maps
 
 
 export const MAZE_1 =

@@ -7,20 +7,16 @@ import {
 } from './levels.js';
 
 import {
-    GRID,
-    TILE_SIZE,
+    levelMenu,
     GameBoard,
 } from './canvas.js';
 
 import { Game } from './game.js';
 
-const levelMenu = document.getElementById("instr-and-level");
 const startGameButton = document.getElementById('btn-show-levels');
 const selectLevelMenu = document.getElementById("level-select");
 
 const canvas = document.createElement("Canvas");
-canvas.setAttribute("width", GRID.COL * TILE_SIZE);
-canvas.setAttribute("height", GRID.ROW * TILE_SIZE);
 
 const levels = new Levels(allMaps());
 const game = new Game(levels);
@@ -44,6 +40,13 @@ function onClickStart() {
     }
 }
 
+const tileMapImg = new Image();
+tileMapImg.onload = () => {
+    board = new GameBoard(canvas, tileMapImg);
+};
+tileMapImg.src = "src/img/tilesheet.png";
+
+
 selectLevelMenu.addEventListener('change', onSelectLevel);
 
 function onSelectLevel() {
@@ -57,12 +60,7 @@ function onSelectLevel() {
 
     game.chooseLevel(index);
 
-    const tileMapImg = new Image();
-    tileMapImg.onload = () => {
-        board = new GameBoard(canvas, tileMapImg);
-        board.renderMap(game.getCurrentMap());
-    };
-    tileMapImg.src = "src/img/tilesheet.png";
+    board.renderMap(game.getCurrentMap());
 
     selectLevelMenu.blur();
 }
@@ -99,21 +97,24 @@ window.addEventListener('keydown', event => {
     }
 });
 
+const nextBtn = document.querySelector('#next-level');
+const onWinPopUp = document.querySelector('#onwin-popup');
+
 function onWin() {
     document.body.style.backgroundColor = "Whitesmoke";
     document.body.style.color = "black";
     
-    const onWinButtons = document.createElement('div');
-    onWinButtons.setAttribute("id", "btn-onwin");
-    const previousBtn = document.createElement('button');
-    previousBtn.textContent = "Previous Level";
-    previousBtn.setAttribute("id", "previous-level");
-    const nextBtn = document.createElement('button');
-    nextBtn.textContent = "Next Level";
-    nextBtn.setAttribute("id", "next-level");
-    onWinButtons.appendChild(previousBtn);
-    onWinButtons.appendChild(nextBtn);
-
-    document.body.insertBefore(onWinButtons, document.querySelector('script'));
+    onWinPopUp.classList.remove('hidden');
 }
 
+nextBtn.addEventListener('click', onClickNext);
+
+function onClickNext() {
+    game.chooseNextLevel();
+    document.body.style.backgroundColor = "#0a0a0a";
+    document.body.style.color = "Whitesmoke";
+
+    onWinPopUp.classList.add('hidden');
+    selectLevelMenu.selectedIndex = game.currentLevelNum;
+    board.renderMap(game.getCurrentMap());  
+}

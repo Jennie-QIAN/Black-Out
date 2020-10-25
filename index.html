@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black-Out</title>
+    <title>Blackout-the puzzle game</title>
     <link rel="stylesheet" href="src/css/style.css">
     <link rel="icon" type="image/x-icon" href="src/img/pea.ico">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>BLACK OUT</h1>
+    <h1 id="game-name">BLACKOUT</h1>
     <section id="manifesto">
         <div>
             <p>You are black-eyed pea</p>
@@ -55,6 +55,11 @@
             </select>
         </div>
     </section>
+    <div id="onwin-popup" class="hidden">
+        <span>BRAVO</span>
+        <button id="next-level">Next Level</button>
+    </div>
+
     <script type="module" src="src/js/main.js"></script>
 </body>
 </html>

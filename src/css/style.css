@@ -6,21 +6,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
 }
 
 h1 {
     font-family: 'Press Start 2P', cursive;
     font-size: 3rem;
-    margin-top: 50px;
-    margin-bottom: 0;
+    padding-top: 50px;
+    margin: 0;
 }
 
 #manifesto {
     display: inline-flex;
     flex-direction: column;
     align-items: stretch;
-    margin-top: 100px;
-    margin-bottom: 50px;
+    padding-top: 100px;
+    padding-bottom: 50px;
 }
 
 #manifesto div {
@@ -107,10 +108,12 @@ h1 {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 30px;
+    padding-top: 30px;
+    margin: 0;
 }
 
-#instr-and-level.hidden {
+#instr-and-level.hidden,
+#onwin-popup.hidden {
     display: none;
 }
 
@@ -128,4 +131,40 @@ h1 {
 #level-menu label {
     font-size: 1.2rem;
     margin-right: 10px;
+}
+
+#onwin-popup {
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffcc00;
+    border-radius: 4px;
+    padding: 15px;
+    position: absolute;
+    top:40%;
+}
+
+#next-level {
+    margin: 5px;
+    width: 10vw;
+}
+
+span {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+}
+
+#next-level {
+    background-color: whitesmoke;
+    border: 1px solid #0a0a0a;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 5px;
+    margin-top: 20px;
+}
+
+#next-level:hover {
+    background-color: #0a0a0a;
+    color: whitesmoke;
 }
