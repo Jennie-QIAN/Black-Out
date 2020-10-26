@@ -22,6 +22,7 @@ const levels = new Levels(allMaps());
 const game = new Game(levels);
 let board;
 let levelNumber;
+let direction = 0;
 
 startGameButton.addEventListener('click', onClickStart);
 
@@ -60,7 +61,7 @@ function onSelectLevel() {
 
     game.chooseLevel(index);
 
-    board.renderMap(game.getCurrentMap());
+    board.renderMap(game.getCurrentMap(), 0);
 
     selectLevelMenu.blur();
 }
@@ -69,27 +70,34 @@ window.addEventListener('keydown', event => {
     if (game.checkIfWin()) {
         return;
     }
+
     switch (event.key) {
         case 'ArrowUp':
             game.moveUp();
+            direction = 1;
             break;
         case 'ArrowDown':
             game.moveDown();
+            direction = 2;
             break;
         case 'ArrowLeft':
             game.moveLeft();
+            direction = 3;
             break;
         case 'ArrowRight':
             game.moveRight();
+            direction = 4;
             break;
         case 'z':
             game.unDo();
+            direction = 0;
             break;
         case ' ':
             game.reset();
+            direction = 0;
             break;
     }
-    board.renderMap(game.getCurrentMap());
+    board.renderMap(game.getCurrentMap(), direction);
     if (game.checkIfWin()) {
         setTimeout(function() {
             onWin();
@@ -116,5 +124,5 @@ function onClickNext() {
 
     onWinPopUp.classList.add('hidden');
     selectLevelMenu.selectedIndex = game.currentLevelNum;
-    board.renderMap(game.getCurrentMap());  
+    board.renderMap(game.getCurrentMap(), 0);  
 }

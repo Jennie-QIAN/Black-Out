@@ -40,7 +40,7 @@ export class GameBoard {
         };
     }
 
-    renderMap(level) {
+    renderMap(level, direction) {
         const {
             tileSize,
             width,
@@ -55,11 +55,23 @@ export class GameBoard {
         for (let c = 0; c < level[0].length; c++) {
             for (let r = 0; r < level.length; r++) {
                 let tile = level[r][c];
-                if (tile !== 0) {
+                if (tile !== 0 && tile !== 1) {
                     this.ctx.drawImage(
                         this.tileMapImg,
                         (tile - 1) * 32,
                         0,
+                        32,
+                        32,
+                        c * tileSize,
+                        r * tileSize,
+                        tileSize,
+                        tileSize
+                    );
+                } else if (tile == 1) {
+                    this.ctx.drawImage(
+                        this.tileMapImg,
+                        (tile - 1 + direction) * 32,
+                        32,
                         32,
                         32,
                         c * tileSize,
