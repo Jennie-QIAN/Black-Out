@@ -7,7 +7,7 @@ import {
 } from './levels.js';
 
 import {
-    levelMenu,
+    instructionAndLevelMenu,
     GameBoard,
 } from './canvas.js';
 
@@ -16,7 +16,7 @@ import { Game } from './game.js';
 const startGameButton = document.getElementById('btn-show-levels');
 const selectLevelMenu = document.getElementById("level-select");
 
-const canvas = document.createElement("Canvas");
+const canvas = document.createElement("canvas");
 
 const levels = new Levels(allMaps());
 const game = new Game(levels);
@@ -29,7 +29,7 @@ startGameButton.addEventListener('click', onClickStart);
 function onClickStart() {
     document.getElementById('manifesto').style.display = "none";
     startGameButton.style.display = "none";
-    levelMenu.classList.remove("hidden");
+    instructionAndLevelMenu.classList.remove("hidden");
 
     const numberOfLevels = allMaps().length;
     let n = 1;
@@ -52,13 +52,12 @@ selectLevelMenu.addEventListener('change', onSelectLevel);
 
 function onSelectLevel() {
     document.body.style.backgroundColor = "#0a0a0a";
-    document.body.style.color = "Whitesmoke";
+    document.body.style.color = "whitesmoke";
 
     const index = selectLevelMenu.selectedIndex;
     levelNumber = index;
 
-    document.body.insertBefore(canvas, document.querySelector('script'));
-
+    instructionAndLevelMenu.insertAdjacentElement('afterend', canvas);
     game.chooseLevel(index);
 
     board.renderMap(game.getCurrentMap(), 0);

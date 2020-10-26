@@ -1,4 +1,4 @@
-export const levelMenu = document.getElementById("instr-and-level");
+export const instructionAndLevelMenu = document.getElementById("instr-and-level");
 export const gameName = document.getElementById("game-name");
 
 export class GameBoard {
@@ -10,7 +10,7 @@ export class GameBoard {
 
     getCanvasSize(level) {
         let tileSize = 32;
-        let heightCanvas = window.innerHeight - gameName.offsetHeight- levelMenu.offsetHeight;
+        let heightCanvas = window.innerHeight - gameName.offsetHeight- instructionAndLevelMenu.offsetHeight;
         
         let widthCanvas = window.innerWidth;
         const mapRow = level.length;
