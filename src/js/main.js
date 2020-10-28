@@ -13,16 +13,20 @@ import {
 
 import { Game } from './game.js';
 
-const startGameButton = document.getElementById('btn-show-levels');
+const startGameButton = document.getElementById('btn-start');
 const selectLevelMenu = document.getElementById("level-select");
 
-const canvas = document.createElement("canvas");
+const canvas = document.querySelector("canvas");
 
 const levels = new Levels(allMaps());
 const game = new Game(levels);
 let board;
 let levelNumber;
 let direction = 0;
+
+if (localStorage.length > 0) {
+    startGameButton.textContent = 'CONTINUE';
+}
 
 startGameButton.addEventListener('click', onClickStart);
 
@@ -32,13 +36,26 @@ function onClickStart() {
     instructionAndLevelMenu.classList.remove("hidden");
 
     const numberOfLevels = allMaps().length;
-    let n = 1;
+    let n = 2;
     while (n <= numberOfLevels) {
         const levelOption = selectLevelMenu.appendChild(document.createElement("option"));
         levelOption.setAttribute("value", n);
         levelOption.textContent = n;
         n++;
     }
+
+    if (localStorage.length > 0) {
+        for (let i = 0; i < localStorage.length; i++) {
+            const level = localStorage.key(i);
+            document.querySelector(`option[value = "${level}"]`).textContent = `${level} : solved`;
+        }
+
+        const highestLevel = parseInt(Object.keys(localStorage).sort((a, b) => parseInt(b) - parseInt(a))[0]);
+        canvas.classList.remove("hidden");
+        game.chooseLevel(highestLevel + 1);
+        selectLevelMenu.selectedIndex = game.currentLevelNum;
+        board.renderMap(game.getCurrentMap(), 0);
+    } 
 }
 
 const tileMapImg = new Image();
@@ -57,7 +74,7 @@ function onSelectLevel() {
     const index = selectLevelMenu.selectedIndex;
     levelNumber = index;
 
-    instructionAndLevelMenu.insertAdjacentElement('afterend', canvas);
+    canvas.classList.remove("hidden");
     game.chooseLevel(index);
 
     board.renderMap(game.getCurrentMap(), 0);
@@ -110,8 +127,11 @@ const onWinPopUp = document.querySelector('#onwin-popup');
 function onWin() {
     document.body.style.backgroundColor = "Whitesmoke";
     document.body.style.color = "black";
+    const currentLevel = game.currentLevelNum;
     
     onWinPopUp.classList.remove('hidden');
+    document.querySelector(`option[value = "${currentLevel}"]`).textContent += " : solved";
+    localStorage.setItem(game.currentLevelNum, game.history.length - 1);
 }
 
 nextBtn.addEventListener('click', onClickNext);

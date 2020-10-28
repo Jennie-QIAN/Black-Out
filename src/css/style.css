@@ -63,7 +63,7 @@ h1 {
     background: url(../img/tilesheet.png) -128px 0;
 }
 
-#btn-show-levels {
+#btn-start {
     background-color: transparent;
     color: whitesmoke;
     border: 1px solid #e7e7e7;
@@ -72,7 +72,7 @@ h1 {
     border-radius: 6px;
 }
 
-#btn-show-levels:hover {
+#btn-start:hover {
     background-color: whitesmoke;
     border-color: whitesmoke;
     color: #0a0a0a;
@@ -113,7 +113,8 @@ h1 {
 }
 
 #instr-and-level.hidden,
-#onwin-popup.hidden {
+#onwin-popup.hidden,
+canvas.hidden {
     display: none;
 }
 

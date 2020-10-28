@@ -32,7 +32,7 @@
             <div id="light"></div>
         </div>
     </section>
-    <button id="btn-show-levels">START</button>
+    <button id="btn-start">START</button>
     <section id="instr-and-level" class="hidden">
         <div id="instructions">
             <div id="arrowkeys">
@@ -52,9 +52,11 @@
             <label for="level-select">Level : </label>
             <select name="levels" id="level-select">
                 <option value="">--choose here--</option>
+                <option value="1">1</option>
             </select>
         </div>
     </section>
+    <canvas class="hidden"></canvas>
     <div id="onwin-popup" class="hidden">
         <span>BRAVO</span>
         <button id="next-level">Next Level</button>
