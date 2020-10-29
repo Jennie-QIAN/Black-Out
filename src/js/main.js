@@ -121,17 +121,22 @@ window.addEventListener('keydown', event => {
     }
 });
 
-const nextBtn = document.querySelector('#next-level');
+const winSound = new Audio("src/audio/win.mp3");
 const onWinPopUp = document.querySelector('#onwin-popup');
+const nextBtn = document.querySelector('#next-level');
 
 function onWin() {
+    winSound.play();
     document.body.style.backgroundColor = "Whitesmoke";
     document.body.style.color = "black";
     const currentLevel = game.currentLevelNum;
     
     onWinPopUp.classList.remove('hidden');
-    document.querySelector(`option[value = "${currentLevel}"]`).textContent += " : solved";
-    localStorage.setItem(game.currentLevelNum, game.history.length - 1);
+
+    if (!localStorage.getItem(game.currentLevelNum)) {
+        document.querySelector(`option[value = "${currentLevel}"]`).textContent += " : solved";
+        localStorage.setItem(game.currentLevelNum, game.history.length - 1);
+    }
 }
 
 nextBtn.addEventListener('click', onClickNext);
@@ -145,3 +150,4 @@ function onClickNext() {
     selectLevelMenu.selectedIndex = game.currentLevelNum;
     board.renderMap(game.getCurrentMap(), 0);  
 }
+

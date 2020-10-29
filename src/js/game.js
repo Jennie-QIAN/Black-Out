@@ -1,3 +1,6 @@
+const preloadOnTargetSound = new Audio("src/audio/ontarget.mp3");
+preloadOnTargetSound.load();
+
 export class Game {
 
     constructor(levels) {
@@ -122,6 +125,8 @@ export class Game {
                 currentMap[playerRow + deltaR][playerCol + deltaC] = playerLocOriginValue === 4 ? 4 : 0;
             } else if (currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === 4) {
                 currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] = 5;
+                const onTargetSound = new Audio("src/audio/ontarget.mp3");
+                onTargetSound.play();
                 currentMap[playerRow + deltaR][playerCol + deltaC] = playerLocOriginValue === 4 ? 4 : 0;
             }
         }
