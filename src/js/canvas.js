@@ -16,8 +16,8 @@ export class GameBoard {
         const mapRow = level.length;
         const mapCol = level[0].length;
 
-        const sizeR = heightCanvas / mapRow;
-        const sizeC = widthCanvas / mapCol;
+        const sizeR = Math.round(heightCanvas / mapRow);
+        const sizeC = Math.round(widthCanvas / mapCol);
 
         if (heightCanvas >= mapRow * tileSize && widthCanvas >= mapCol * tileSize) {
             widthCanvas = mapCol * tileSize;
@@ -35,8 +35,8 @@ export class GameBoard {
         }
         return {
             tileSize: tileSize,
-            width: Math.round(widthCanvas),
-            height: Math.round(heightCanvas),
+            width: widthCanvas,
+            height: heightCanvas,
         };
     }
 
