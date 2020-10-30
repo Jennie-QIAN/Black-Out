@@ -125,8 +125,10 @@ export class Game {
                 currentMap[playerRow + deltaR][playerCol + deltaC] = playerLocOriginValue === 4 ? 4 : 0;
             } else if (currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] === 4) {
                 currentMap[playerRow + 2 * deltaR][playerCol + 2 * deltaC] = 5;
-                const onTargetSound = new Audio("src/audio/ontarget.mp3");
-                onTargetSound.play();
+                if (this.countBoxOnTarget() !== this.countTargets() -1) {
+                    const onTargetSound = new Audio("src/audio/ontarget.mp3");
+                    onTargetSound.play();
+                }
                 currentMap[playerRow + deltaR][playerCol + deltaC] = playerLocOriginValue === 4 ? 4 : 0;
             }
         }
@@ -156,15 +158,18 @@ export class Game {
     }
 
     checkIfWin() {
-        const originMap = this.history[0];
+        return this.countBoxOnTarget() === this.countTargets();
+    }
+
+    countBoxOnTarget() {
         const currentMap = this.history[this.history.length - 1];
-
-        const targets = originMap.map(row => row.filter(tile => tile === 4));
-        const numOfTargets = targets.reduce((count, row) => count + row.length, 0);
-
         const boxesOnTarget = currentMap.map(row => row.filter(tile => tile === 5));
-        const numOfBoxesOnTarget = boxesOnTarget.reduce((count, row) => count + row.length, 0);
+        return boxesOnTarget.reduce((count, row) => count + row.length, 0);
+    }
 
-        return numOfTargets === numOfBoxesOnTarget;
+    countTargets() {
+        const originMap = this.history[0];
+        const targets = originMap.map(row => row.filter(tile => tile === 4));
+        return targets.reduce((count, row) => count + row.length, 0);
     }
 }

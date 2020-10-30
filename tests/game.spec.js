@@ -747,4 +747,41 @@ describe('Game Class', () => {
             expect(game.checkIfWin()).toBeFalsy();
         });
     });
+
+    describe('countBoxOnTarget', () => {
+        it('returns the number of boxes that are on the targets', () => {
+            const MAP_1 = [
+                [0,5,0],
+                [0,3,5],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.countBoxOnTarget();
+
+            expect(game.countBoxOnTarget()).toEqual(2);
+        });
+    });
+
+    describe('countTargets', () => {
+        it('returns the number of targets of the chosen level', () => {
+            const MAP_1 = [
+                [4,4,0],
+                [0,3,4],
+                [0,1,0],
+            ];
+            const maps = [MAP_1];
+            const levels = new Levels(maps);
+            const game = new Game(levels);
+
+            game.chooseLevel(1);
+            game.moveUp();
+            game.countTargets();
+
+            expect(game.countTargets()).toEqual(3);
+        });
+    });
 });
