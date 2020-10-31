@@ -53,6 +53,11 @@ function onClickStart() {
 
         const highestLevel = parseInt(Object.keys(localStorage).sort((a, b) => parseInt(b) - parseInt(a))[0]);
         canvas.classList.remove("hidden");
+
+        if (highestLevel === 60) {
+            return;
+        }
+        
         game.chooseLevel(highestLevel + 1);
         selectLevelMenu.selectedIndex = game.currentLevelNum;
         board.renderMap(game.getCurrentMap(), 0);
@@ -67,8 +72,10 @@ tileMapImg.src = "src/img/tilesheet.png";
 
 
 selectLevelMenu.addEventListener('change', onSelectLevel);
+let epicWinDisco;
 
 function onSelectLevel() {
+    cancelAnimationFrame(epicWinDisco);
     document.body.style.backgroundColor = "#0a0a0a";
     document.body.style.color = "whitesmoke";
 
@@ -113,6 +120,9 @@ window.addEventListener('keydown', event => {
             game.reset();
             direction = 0;
             break;
+        case 'w':
+            game.cheat();
+            break;
     }
     board.renderMap(game.getCurrentMap(), direction);
     if (game.checkIfWin()) {
@@ -123,6 +133,7 @@ window.addEventListener('keydown', event => {
 });
 
 const winSound = new Audio("src/audio/win.mp3");
+const epicWinSound = new Audio("src/audio/epicwin.mp3");
 const onWinPopUp = document.querySelector('#onwin-popup');
 const nextBtn = document.querySelector('#next-level');
 
@@ -130,7 +141,7 @@ function onWin() {
     const currentLevel = game.currentLevelNum;
     const numOfMoves = game.history.length - 1;
 
-    if (currentLevel === levels.length) {
+    if (currentLevel === 60) {
         onEpicWin();
     } else {
         winSound.play();
@@ -168,6 +179,7 @@ const backgroundColor = {
 
 function onEpicWin() {
     updateBackground();
+    epicWinSound.play();
 }
 
 function updateBackground() {
@@ -177,5 +189,5 @@ function updateBackground() {
 
     document.body.style.backgroundColor = backgroundColor.rgb();
 
-    requestAnimationFrame(updateBackground);
+    epicWinDisco = requestAnimationFrame(updateBackground);
 }

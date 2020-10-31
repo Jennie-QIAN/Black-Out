@@ -172,4 +172,20 @@ export class Game {
         const targets = originMap.map(row => row.filter(tile => tile === 4));
         return targets.reduce((count, row) => count + row.length, 0);
     }
+
+    cheat() {
+        let map = this.copyMap(this.getCurrentMap());
+        for (let r = 0; r < map.length; r++) {
+            for (let c = 0; c < map[0].length; c++) {
+                const tile = map[r][c];
+                if (tile === 3) {
+                    map[r][c] = 0;
+                } 
+                if (tile === 4) {
+                    map[r][c] = 5;
+                }
+            }
+        }
+        this.history.push(map);
+    }
 }

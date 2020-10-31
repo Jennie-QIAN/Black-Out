@@ -83,4 +83,15 @@ export class GameBoard {
             }
         }
     }
+
+    /* drawEpicWin(level) {
+        const {
+            tileSize,
+            width,
+            height
+        } = this.getCanvasSize(level);
+
+        this.ctx.clearRect(0, 0, width, height);
+        this.ctx.fillText("WIN", (width - 400) / 2, (height - 300) / 2); 
+    } */
 }
