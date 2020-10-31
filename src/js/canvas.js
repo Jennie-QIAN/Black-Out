@@ -6,6 +6,7 @@ export class GameBoard {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.tileMapImg = tileMapImg;
+        this.epicPeaDirection = "";
     }
 
     getCanvasSize(level) {
@@ -84,7 +85,7 @@ export class GameBoard {
         }
     }
 
-    /* drawEpicWin(level) {
+    drawEpicWin(level) {
         const {
             tileSize,
             width,
@@ -92,6 +93,88 @@ export class GameBoard {
         } = this.getCanvasSize(level);
 
         this.ctx.clearRect(0, 0, width, height);
-        this.ctx.fillText("WIN", (width - 400) / 2, (height - 300) / 2); 
-    } */
+        const textSize = `${tileSize * 2}px`;
+        
+        this.ctx.font = `${textSize} "Press Start 2P"`;
+        this.ctx.fillStyle = "#ffcc00";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText('AWESOME', width / 2, height / 2);
+
+        this.ctx.font = "20px sans-serif";
+        this.ctx.fillStyle = "whitesmoke";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText(`You have conquered the ultimate challenge!`, width / 2, height / 2 + tileSize);
+        this.ctx.fillText(`To replay, please choose a level`, width / 2, height / 2 + tileSize * 2);
+
+        /*const gravity = 0.1;
+
+        let pea = {
+            x: width / 2 - 16,
+            y: 0,
+            vy: 10,
+            size: 32,
+            yMax: height / 2 - tileSize * 2 - 64,
+            yMin: 0
+        };
+
+        this.drawPeaOnEpicWin(pea); 
+        setInterval(() => this.updatePeaOnEpicWin(pea, gravity), 70);*/
+    }
+
+    getPeaRef(level) {
+        const {
+            tileSize,
+            width,
+            height
+        } = this.getCanvasSize(level);
+    
+        const pea = {
+            x: width / 2 - 16,
+            y: 0,
+            vy: 5,
+            size: 32,
+            yMax: height / 2 - tileSize * 2 - 64,
+            yMin: 0
+        };
+        return pea;
+    }
+
+    drawPeaOnEpicWin(pea) {
+        this.ctx.drawImage(
+            this.tileMapImg,
+            0,
+            0,
+            32,
+            32,
+            pea.x,
+            pea.y,
+            pea.size,
+            pea.size
+        );
+    }
+
+    updatePeaOnEpicWin(pea, gravity) {
+
+        this.ctx.clearRect(pea.x, pea.y, pea.size, pea.size);
+
+        if (pea.y >= pea.yMax - pea.vy - gravity) {
+            this.epicPeaDirection = "up";
+            pea.vy = 10;
+        } else if (pea.y <= pea.yMin + pea.vy + gravity) {
+            this.epicPeaDirection = "down";
+            pea.vy = 10;
+        }
+       
+        switch (this.epicPeaDirection) {
+            case "down":
+                pea.vy += gravity;
+                pea.y += pea.vy;
+                break;
+            case "up":
+                pea.vy += gravity;
+                pea.y -= pea.vy;
+                break;
+        }
+        this.drawPeaOnEpicWin(pea); 
+    }
 }

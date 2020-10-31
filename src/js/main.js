@@ -73,9 +73,11 @@ tileMapImg.src = "src/img/tilesheet.png";
 
 selectLevelMenu.addEventListener('change', onSelectLevel);
 let epicWinDisco;
+let epicWinPeaBounce;
 
 function onSelectLevel() {
     cancelAnimationFrame(epicWinDisco);
+    clearInterval(epicWinPeaBounce);
     document.body.style.backgroundColor = "#0a0a0a";
     document.body.style.color = "whitesmoke";
 
@@ -177,9 +179,20 @@ const backgroundColor = {
     }
 };
 
+let pea;
+const gravity = 0.2;
+
 function onEpicWin() {
     updateBackground();
     epicWinSound.play();
+    
+    pea = board.getPeaRef(game.getCurrentMap());
+
+    setTimeout(() => {
+        board.drawEpicWin(game.getCurrentMap());
+        board.drawPeaOnEpicWin(pea);
+        epicWinPeaBounce = setInterval(() => board.updatePeaOnEpicWin(pea, gravity), 80);
+    }, 400);  
 }
 
 function updateBackground() {
