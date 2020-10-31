@@ -47,7 +47,8 @@ function onClickStart() {
     if (localStorage.length > 0) {
         for (let i = 0; i < localStorage.length; i++) {
             const level = localStorage.key(i);
-            document.querySelector(`option[value = "${level}"]`).textContent = `${level} : solved`;
+            const numOfMoves = localStorage.getItem(level);
+            document.querySelector(`option[value = "${level}"]`).textContent = `${level} : solved | ${numOfMoves} moves`;
         }
 
         const highestLevel = parseInt(Object.keys(localStorage).sort((a, b) => parseInt(b) - parseInt(a))[0]);
@@ -126,16 +127,21 @@ const onWinPopUp = document.querySelector('#onwin-popup');
 const nextBtn = document.querySelector('#next-level');
 
 function onWin() {
-    winSound.play();
-    document.body.style.backgroundColor = "Whitesmoke";
-    document.body.style.color = "black";
     const currentLevel = game.currentLevelNum;
-    
-    onWinPopUp.classList.remove('hidden');
+    const numOfMoves = game.history.length - 1;
+
+    if (currentLevel === levels.length) {
+        onEpicWin();
+    } else {
+        winSound.play();
+        document.body.style.backgroundColor = "Whitesmoke";
+        document.body.style.color = "#0a0a0a";
+        onWinPopUp.classList.remove('hidden');
+    }  
 
     if (!localStorage.getItem(game.currentLevelNum)) {
-        document.querySelector(`option[value = "${currentLevel}"]`).textContent += " : solved";
-        localStorage.setItem(game.currentLevelNum, game.history.length - 1);
+        document.querySelector(`option[value = "${currentLevel}"]`).textContent += ` : solved | ${numOfMoves} moves`;
+        localStorage.setItem(currentLevel, numOfMoves);
     }
 }
 
@@ -151,3 +157,25 @@ function onClickNext() {
     board.renderMap(game.getCurrentMap(), 0);  
 }
 
+const backgroundColor = {
+    red: Math.floor(Math.random() * 255),
+    green: Math.floor(Math.random() * 255),
+    blue: Math.floor(Math.random() * 255),
+    rgb: function() {
+        return `rgb(${this.red}, ${this.green}, ${this.blue})`;
+    }
+};
+
+function onEpicWin() {
+    updateBackground();
+}
+
+function updateBackground() {
+    backgroundColor.red = (backgroundColor.red + 1) % 255;
+    backgroundColor.blue = (backgroundColor.blue + 1) % 255;
+    backgroundColor.green = (backgroundColor.green + 1) % 255;
+
+    document.body.style.backgroundColor = backgroundColor.rgb();
+
+    requestAnimationFrame(updateBackground);
+}

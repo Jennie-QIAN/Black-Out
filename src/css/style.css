@@ -14,6 +14,26 @@ h1 {
     font-size: 3rem;
     padding-top: 50px;
     margin: 0;
+    animation-name: flash;
+    animation-duration: 3s;
+}
+
+@keyframes flash {
+    25% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 #manifesto {
