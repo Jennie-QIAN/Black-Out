@@ -191,7 +191,7 @@ span {
     color: whitesmoke;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     #instructions {
         display: none;
     }
@@ -213,10 +213,28 @@ span {
         bottom: 0;
     }
 
+    #undo,
+    #retry {
+        position: fixed;
+        bottom: 84px;
+    }
+
+    #undo {
+        left: 0;
+        margin-left: 10px;
+    }
+
+    #retry {
+        right: 0;
+        margin-right: 10px;
+    }
+
     #left,
     #right,
     #up,
-    #down {
+    #down,
+    #undo,
+    #retry {
         width: 64px;
         height: 64px;
     }
@@ -230,16 +248,56 @@ span {
         background: url(../img/left.png);
     }
 
+    #left.clicked {
+        background: url(../img/leftclicked.png);
+    }
+
     #right {
         background: url(../img/right.png);
+    }
+
+    #right.clicked {
+        background: url(../img/rightclicked.png);
     }
 
     #up {
         background: url(../img/up.png);
     }
 
+    #up.clicked {
+        background: url(../img/upclicked.png);
+    }
+
     #down {
         background: url(../img/down.png);
+    }
+
+    #down.clicked {
+        background: url(../img/downclicked.png);
+    }
+
+    #undo {
+        background: url(../img/undo.png);
+    }
+
+    #undo.clicked {
+        background: url(../img/undoclicked.png);
+    }
+
+    #retry {
+        background: url(../img/retry.png);
+    }
+
+    #retry.clicked {
+        background: url(../img/retryclicked.png);
+    }
+
+    #onwin-popup {
+        width: 30vw;
+    }
+    
+    #next-level {
+        width: 15vw;
     }
 }
 
@@ -255,5 +313,13 @@ span {
     }
     #level-menu {
         margin: 0;
+    }
+
+    #onwin-popup {
+        width: 40vw;
+    }
+    
+    #next-level {
+        width: 20vw;
     }
 }

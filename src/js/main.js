@@ -16,12 +16,15 @@ import { Game } from './game.js';
 const startGameButton = document.getElementById("btn-start");
 const selectLevelMenu = document.getElementById("level-select");
 
-let mediaQueryControl = window.matchMedia('(max-width: 768px)');
+let mMediaQueryControl = window.matchMedia('(max-width: 1024px)');
+let sMediaQueryControl = window.matchMedia('(max-width: 411px)');
 const mobileControls = document.querySelector(".mobile-controls");
 const mobileLeftControl = document.querySelector("#left");
 const mobileRightControl = document.querySelector("#right");
 const mobileUpControl = document.querySelector("#up");
 const mobileDownControl = document.querySelector("#down");
+const mobileUndoControl = document.querySelector("#undo");
+const mobileRetryControl = document.querySelector("#retry");
 
 const canvas = document.querySelector("canvas");
 
@@ -42,7 +45,7 @@ function onClickStart() {
     startGameButton.style.display = "none";
     instructionAndLevelMenu.classList.remove("hidden");
 
-    if (mediaQueryControl) {
+    if (mMediaQueryControl.matches) {
         mobileControls.classList.remove("hidden");
     }
     
@@ -158,20 +161,40 @@ document.querySelectorAll(".mobile-control").forEach(el => el.addEventListener('
 
     switch (target) {
         case mobileLeftControl:
+            mobileLeftControl.classList.toggle("clicked");
             game.moveLeft();
             direction = 3;
+            setTimeout(() => mobileLeftControl.classList.toggle("clicked"), 50);
             break;
         case mobileRightControl:
+            mobileRightControl.classList.toggle("clicked");
             game.moveRight();
             direction = 4;
+            setTimeout(() => mobileRightControl.classList.toggle("clicked"), 50);
             break;
         case mobileUpControl:
+            mobileUpControl.classList.toggle("clicked");
             game.moveUp();
             direction = 1;
+            setTimeout(() => mobileUpControl.classList.toggle("clicked"), 50);
             break;
         case mobileDownControl:
+            mobileDownControl.classList.toggle("clicked");
             game.moveDown();
             direction = 2;
+            setTimeout(() => mobileDownControl.classList.toggle("clicked"), 50);
+            break;
+        case mobileUndoControl:
+            mobileUndoControl.classList.toggle("clicked");
+            game.unDo();
+            direction = 0;
+            setTimeout(() => mobileUndoControl.classList.toggle("clicked"), 50);
+            break;
+        case mobileRetryControl:
+            mobileRetryControl.classList.toggle("clicked");
+            game.reset();
+            direction = 0;
+            setTimeout(() => mobileRetryControl.classList.toggle("clicked"), 50);
             break;
     }
     onPlayerMove(direction);
@@ -229,6 +252,11 @@ function onEpicWin() {
     updateBackground();
     epicWinSound.play();
     
+    if (sMediaQueryControl.matches) {
+        console.log(sMediaQueryControl);
+        return;
+    }
+
     pea = board.getPeaRef(game.getCurrentMap());
 
     setTimeout(() => {
