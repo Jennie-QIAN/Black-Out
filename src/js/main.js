@@ -13,8 +13,15 @@ import {
 
 import { Game } from './game.js';
 
-const startGameButton = document.getElementById('btn-start');
+const startGameButton = document.getElementById("btn-start");
 const selectLevelMenu = document.getElementById("level-select");
+
+let mediaQueryControl = window.matchMedia('(max-width: 768px)');
+const mobileControls = document.querySelector(".mobile-controls");
+const mobileLeftControl = document.querySelector("#left");
+const mobileRightControl = document.querySelector("#right");
+const mobileUpControl = document.querySelector("#up");
+const mobileDownControl = document.querySelector("#down");
 
 const canvas = document.querySelector("canvas");
 
@@ -35,6 +42,10 @@ function onClickStart() {
     startGameButton.style.display = "none";
     instructionAndLevelMenu.classList.remove("hidden");
 
+    if (mediaQueryControl) {
+        mobileControls.classList.remove("hidden");
+    }
+    
     const numberOfLevels = allMaps().length;
     let n = 2;
     while (n <= numberOfLevels) {
@@ -92,6 +103,15 @@ function onSelectLevel() {
     selectLevelMenu.blur();
 }
 
+function onPlayerMove(direction) {
+    board.renderMap(game.getCurrentMap(), direction);
+    if (game.checkIfWin()) {
+        setTimeout(function() {
+            onWin();
+        }, 200) ;
+    }
+}
+
 window.addEventListener('keydown', event => {
     if (game.checkIfWin()) {
         return;
@@ -126,13 +146,36 @@ window.addEventListener('keydown', event => {
             game.cheat();
             break;
     }
-    board.renderMap(game.getCurrentMap(), direction);
-    if (game.checkIfWin()) {
-        setTimeout(function() {
-            onWin();
-        }, 200) ;
-    }
+    onPlayerMove(direction);
 });
+
+document.querySelectorAll(".mobile-control").forEach(el => el.addEventListener('click', event => {
+    const target = event.target;
+
+    if (game.checkIfWin()) {
+        return;
+    }
+
+    switch (target) {
+        case mobileLeftControl:
+            game.moveLeft();
+            direction = 3;
+            break;
+        case mobileRightControl:
+            game.moveRight();
+            direction = 4;
+            break;
+        case mobileUpControl:
+            game.moveUp();
+            direction = 1;
+            break;
+        case mobileDownControl:
+            game.moveDown();
+            direction = 2;
+            break;
+    }
+    onPlayerMove(direction);
+}));
 
 const winSound = new Audio("src/audio/win.mp3");
 const epicWinSound = new Audio("src/audio/epicwin.mp3");

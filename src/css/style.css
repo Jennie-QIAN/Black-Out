@@ -134,7 +134,8 @@ h1 {
 
 #instr-and-level.hidden,
 #onwin-popup.hidden,
-canvas.hidden {
+canvas.hidden,
+.mobile-controls.hidden {
     display: none;
 }
 
@@ -150,7 +151,7 @@ canvas.hidden {
 }
 
 #level-menu label {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-right: 10px;
 }
 
@@ -188,4 +189,71 @@ span {
 #next-level:hover {
     background-color: #0a0a0a;
     color: whitesmoke;
+}
+
+@media (max-width: 768px) {
+    #instructions {
+        display: none;
+    }
+
+    #left-right,
+    #up-down {
+        display: flex;
+        position: fixed;
+        padding: 10px;
+    }
+
+    #left-right { 
+        left: 0;
+        bottom: 0;
+    }
+
+    #up-down {
+        right: 0;
+        bottom: 0;
+    }
+
+    #left,
+    #right,
+    #up,
+    #down {
+        width: 64px;
+        height: 64px;
+    }
+
+    #left,
+    #up {
+        margin-right: 10px;
+    }
+
+    #left {
+        background: url(../img/left.png);
+    }
+
+    #right {
+        background: url(../img/right.png);
+    }
+
+    #up {
+        background: url(../img/up.png);
+    }
+
+    #down {
+        background: url(../img/down.png);
+    }
+}
+
+
+@media (max-width: 411px) {
+    h1 {
+        font-size: 1.5rem;
+        padding-top: 25px;
+    }
+
+    #instr-and-level {
+        padding: 15px 0;
+    }
+    #level-menu {
+        margin: 0;
+    }
 }
