@@ -105,20 +105,6 @@ export class GameBoard {
         this.ctx.textAlign = "center";
         this.ctx.fillText(`You have conquered the ultimate challenge!`, width / 2, height / 2 + tileSize);
         this.ctx.fillText(`To replay, please choose a level`, width / 2, height / 2 + tileSize * 2);
-
-        /*const gravity = 0.1;
-
-        let pea = {
-            x: width / 2 - 16,
-            y: 0,
-            vy: 10,
-            size: 32,
-            yMax: height / 2 - tileSize * 2 - 64,
-            yMin: 0
-        };
-
-        this.drawPeaOnEpicWin(pea); 
-        setInterval(() => this.updatePeaOnEpicWin(pea, gravity), 70);*/
     }
 
     getPeaRef(level) {
